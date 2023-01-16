@@ -1,5 +1,5 @@
 #pragma endian little
-#pragma pattern_limit 5000000  //up to 5M messages matched
+#pragma pattern_limit 5000000  //up to 5M iterations
 
 #include <type/magic.pat>
 #include <type/types/c.pat>
