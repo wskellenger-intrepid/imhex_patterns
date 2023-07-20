@@ -1,5 +1,6 @@
 #pragma endian little
-#pragma pattern_limit 5000000  //up to 5M iterations
+#pragma pattern_limit 50000000  //up to 5M iterations
+#pragma array_limit 10000000  //up to 1M itterations
 
 #include <type/magic.pat>
 #include <type/types/c.pat>
@@ -121,12 +122,13 @@ struct VsbVersion104Message
     uint8_t data[msg.ExtraDataPtr];
 };
 
-struct VsbFile {
-    VsbFileHeader file_header;
-    if (file_header.file_version == 0x104)
-    {
-        VsbVersion104Message messages[while (!std::mem::eof())];
-    }
-};
+//struct VsbFile 
+//    VsbFileHeader file_header;
+//    if (file_header.file_version == 0x104)
+//    {
+//        VsbVersion104Message messages[while (!std::mem::eof())];
+//    }
+//};
 
-VsbFile vsbfile @ 0x00;
+VsbFileHeader file_header @ 0x00;
+VsbVersion104Message messages[while($ < std::mem::size())] @ $;
