@@ -138,7 +138,7 @@ enum magic : u32 {
 };
 
 // https://www.ietf.org/archive/id/draft-tuexen-opsawg-pcapng-05.html#name-section-header-block
-#define SECTION_HEADER_DEFINED_LEN 28
+#define SECTION_HEADER_KNOWN_LEN 28
 struct pcapng_section_header_t {
     u32 block_type;       /* block type, is a palindrome, 0A0D0D0A is pcapng */
     u32 block_length;     /* block length */
@@ -148,14 +148,14 @@ struct pcapng_section_header_t {
        be u16 version_major;    /* major version number */
        be u16 version_minor;    /* minor version number */
        be u64 section_length;
-       be u8  options[be u32(block_length)-SECTION_HEADER_DEFINED_LEN];  /* block_length minus all other block sizes */
+       be u8  options[be u32(block_length)-SECTION_HEADER_KNOWN_LEN];  /* block_length minus all other block sizes */
        be u32 block_length2;
     }
     else {
        le u16 version_major;    /* major version number */
        le u16 version_minor;    /* minor version number */
        le u64 section_length;
-       le u8  options[le u32(block_length)-SECTION_HEADER_DEFINED_LEN];  /* block_length minus all other block sizes */
+       le u8  options[le u32(block_length)-SECTION_HEADER_KNOWN_LEN];  /* block_length minus all other block sizes */
        le u32 block_length2;
     }
     if (block_length != block_length2) std::warning("pcapng_section_header_t block length mismatch");    
@@ -163,21 +163,21 @@ struct pcapng_section_header_t {
 
 // BLOCK TYPE 0x00000001
 // https://www.ietf.org/archive/id/draft-tuexen-opsawg-pcapng-05.html#name-interface-description-block
-#define INTERFACE_DESC_DEFINED_LEN 20
+#define INTERFACE_DESC_KNOWN_LEN 20
 struct pcapng_interface_description_t {
     u32 block_type;  /* should be 0x00000001 */
     u32 block_length;
     LINKTYPE link_type;
     u16 reserved;
     u32 snap_length;
-    u8 options[block_length-INTERFACE_DESC_DEFINED_LEN];   /* block_length minus all other block sizes */
+    u8 options[block_length-INTERFACE_DESC_KNOWN_LEN];   /* block_length minus all other block sizes */
     u32 block_length2;
     if (block_length != block_length2) std::warning("pcapng_interface_description_t block length mismatch");    
 };
 
 // BLOCK TYPE 0x00000006
 // https://www.ietf.org/archive/id/draft-tuexen-opsawg-pcapng-05.html#name-enhanced-packet-block
-#define PACKET_DEFINED_LEN 32
+#define ENHANCED_PACKET_KNOWN_LEN 32
 struct pcapng_packet_block_t {
     u32 block_type;  /* should be 0x00000006 */
     u32 block_length;
@@ -187,7 +187,7 @@ struct pcapng_packet_block_t {
     u32 captured_packet_length;
     u32 original_packet_length;
     u8 packet_data[captured_packet_length];   /* block_length minus all other block sizes */
-    u8 options[block_length-captured_packet_length-PACKET_DEFINED_LEN];  //block_length - all other blocks
+    u8 options[block_length-captured_packet_length-ENHANCED_PACKET_KNOWN_LEN];  //block_length - all other blocks
     u32 block_length2;
     if (block_length != block_length2) std::warning("pcapng_packet_block_t block length mismatch");    
 };
