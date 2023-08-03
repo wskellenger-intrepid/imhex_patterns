@@ -1,3 +1,9 @@
+// Embarcadero ImageList dissection
+// William Skellenger <wskellenger@intrepidcs.com>
+// MIT License
+
+//WIP
+
 #include <type/types/c.pat>
 
 struct ImageList {

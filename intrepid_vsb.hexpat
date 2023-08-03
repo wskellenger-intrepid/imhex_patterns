@@ -1,3 +1,7 @@
+// Intrepid VSB file dissection
+// William Skellenger <wskellenger@intrepidcs.com>
+// MIT License
+
 #pragma endian little
 #pragma pattern_limit 50000000  //up to 5M iterations
 #pragma array_limit 10000000  //up to 1M itterations

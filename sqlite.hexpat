@@ -1,3 +1,8 @@
+// SQLite file dissection
+// William Skellenger <wskellenger@intrepidcs.com>
+// MIT License
+
+
 #include <std/io.pat> 
 #include <std/mem.pat> 
 #include <std/math.pat> 
