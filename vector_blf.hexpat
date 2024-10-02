@@ -326,13 +326,32 @@ struct BLFFileSignature {
 	u32 reservedFileStatistics[16];
 };
 
-struct BLFOBJHeader {
+struct BLFOBJHeaderBase {
     type::Magic<"LOBJ"> signature;
     u16 headerSize;
     u16 headerVersion;
-    u32 objectSize;
-    u32 RecordType [[comment(this), format("get_formatted_record_type")]];
+    u32 objectSize [[comment("The length of all data, including the header")]];
+    RecordType objectType [[format("get_formatted_record_type")]];
 };
+
+struct BLFOBJHeader {
+    BLFOBJHeaderBase base;
+    u32 objectFlags;
+    u16 clientIndex;
+    u16 objectVersion;
+    u64 objectTimeStamp;
+};
+
+struct BLFOBJHeader2 {
+    BLFOBJHeaderBase base;
+    u32 objectFlags;
+    u8 timeStampStatus;
+    u8 reservedObjectHeader;
+    u16 objectVersion;
+    u64 objectTimeStamp;
+    u64 originalTimeStamp;
+};
+
 
 int32_t calculated_object_length = 0;
 struct BLFRecord {
@@ -354,10 +373,10 @@ struct BLFRecord {
     else
     {
         //verbose error reporting
-        if (calculated_object_length + sizeof(header) != header.objectSize)
+        if (calculated_object_length + sizeof(header) != header.base.objectSize)
         {
             mismatched_length_records_count += 1;
-            std::print("WARNING: Calculated object length: {} doesn't equal: {} (at: {})", calculated_object_length + sizeof(header), header.objectSize, $);
+            std::print("WARNING: Calculated object length: {} doesn't equal: {} (at: {})", calculated_object_length + sizeof(header), header.base.objectSize, $);
         }        
         u8 objectdata[calculated_object_length];    
     }
