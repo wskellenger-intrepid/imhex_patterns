@@ -289,6 +289,13 @@ fn get_record_type_name(RecordType type) {
     }
 };
 
+fn get_formatted_record_type(RecordType type)
+{
+    return std::format("({}) {}", u32(type), get_record_type_name(type));
+};
+
+
+
 /** system time */
 struct SYSTEMTIME {
     uint16_t year;
@@ -324,7 +331,7 @@ struct BLFOBJHeader {
     u16 headerSize;
     u16 headerVersion;
     u32 objectSize;
-    u32 RecordType [[format("get_record_type_name")]];
+    u32 RecordType [[comment(this), format("get_formatted_record_type")]];
 };
 
 int32_t calculated_object_length = 0;
